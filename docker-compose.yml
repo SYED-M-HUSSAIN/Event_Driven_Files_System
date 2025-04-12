@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8000:8000"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  validator:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    command: ["python", "consumers/validator.py"]
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  scanner:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    command: ["python", "consumers/scanner.py"]
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  indexer:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    command: ["python", "consumers/metadata_indexer.py"]
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  notifier:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    command: ["python", "consumers/notifier.py"]
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
