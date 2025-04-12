@@ -5,21 +5,9 @@ import os
 import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from shared.config import RABBITMQ_HOST, RABBITMQ_EXCHANGE
+from shared.config import RABBITMQ_EXCHANGE
 from shared.schemas import FileUploadedEvent, FileIndexedEvent
-
-
-async def connect_with_retries(max_retries=10, delay=5):
-    """Attempt to connect to RabbitMQ with retries."""
-    for attempt in range(max_retries):
-        try:
-            return await aio_pika.connect_robust(f"amqp://guest:guest@{RABBITMQ_HOST}/")
-        except aio_pika.exceptions.AMQPConnectionError as e:
-            print(f"[Indexer] Retry {attempt + 1}: RabbitMQ connection failed – {e}")
-            await asyncio.sleep(delay)
-    print("[Indexer] Could not connect to RabbitMQ.")
-    sys.exit(1)
-
+from shared.common import  connect_with_retries
 
 async def handle_indexer():
     """Main logic for handling the indexer."""

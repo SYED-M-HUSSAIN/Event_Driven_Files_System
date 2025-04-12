@@ -135,11 +135,11 @@ event-driven-file-system/
 │   ├── scanner.py
 │   ├── metadata_indexer.py
 │   └── notifier.py
-├── producer/
+├── api/
 │   └── main.py                # FastAPI application for file uploads
 ├── shared/
-│   ├── config.py              # Configuration file (e.g., RabbitMQ settings)
-│   └── message.py             # Message handling utilities
+│   ├── config.py              # Configuration file
+│   ├── schemas.py              # Pydantic Schema Model 
 ├── Dockerfile                 # Dockerfile for the application
 ├── docker-compose.yml         # Docker Compose configuration
 ├── pyproject.toml             # Poetry dependency management

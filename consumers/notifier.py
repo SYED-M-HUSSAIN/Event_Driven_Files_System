@@ -5,20 +5,8 @@ import sys
 import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from shared.config import RABBITMQ_HOST, RABBITMQ_EXCHANGE
-
-
-async def connect_with_retries(max_retries=10, delay=5):
-    for attempt in range(max_retries):
-        try:
-            conn = await aio_pika.connect_robust(f"amqp://guest:guest@{RABBITMQ_HOST}/")
-            print("✅ Connected to RabbitMQ")
-            return conn
-        except aio_pika.exceptions.AMQPConnectionError as e:
-            print(f"⚠️ Attempt {attempt + 1}/{max_retries} failed: {e}")
-            await asyncio.sleep(delay)
-    print("❌ Failed to connect to RabbitMQ after retries.")
-    sys.exit(1)
+from shared.config import RABBITMQ_EXCHANGE
+from shared.common import  connect_with_retries
 
 
 async def handle_notifier():
