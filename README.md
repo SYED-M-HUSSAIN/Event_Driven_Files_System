@@ -2,7 +2,7 @@
 
 An advanced event-driven system built using **FastAPI**, **RabbitMQ**, and **Docker** for managing file uploads and processing in real-time. The system uses **Poetry** for dependency management, ensuring easy setup and environment management.
 
-![System Architecture Flowchart](sample_files/flow_diagram.png)
+![System Architecture Flowchart](sample_files/image.png)
 
 ## Project Overview
 
